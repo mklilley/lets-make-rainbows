@@ -38,11 +38,6 @@ let sketchPhotons = function (p5_) {
     }
   };
 
-  // Make sure canvas is always the same was as viewport
-  p5_.windowResized = function () {
-    p5_.resizeCanvas(p5_.windowWidth, p5_.windowHeight);
-  };
-
   // p5 keyPressed function checks every time a key is pressed.
   p5_.keyPressed = function (e) {
     // If the key pressed was 's' or 'S', toggle the paused state

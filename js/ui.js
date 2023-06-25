@@ -69,11 +69,6 @@ let sketchUI = function (p5_) {
     }
   };
 
-  // Make sure canvas is always the same was as viewport
-  p5_.windowResized = function () {
-    p5_.resizeCanvas(p5_.windowWidth, p5_.windowHeight);
-  };
-
   p5_.mousePressed = function () {
     console.log("mouse down");
     isDragging = false;
