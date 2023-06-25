@@ -29,7 +29,9 @@ function reflectivityToString() {
 function photonsToString() {
   return photonsInit
     .map((init) => {
-      return `p${init[0][0]}_${init[0][1]}d${init[1][0]}_${init[1][1]}`;
+      return `p${init[0][0].toFixed(2)}_${init[0][1].toFixed(
+        2
+      )}d${init[1][0].toFixed(2)}_${init[1][1].toFixed(2)}`;
     })
     .join("~");
 }
