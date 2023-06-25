@@ -424,6 +424,7 @@ let sketchUI = function (p5_) {
         points = [];
         p5_.clear(); // Clear the pixels in the canvas
         editPrismDiv.style("display", "none");
+        p5_.setDraftPrismReady(false);
       } else {
         isPaused = true; // Pause the simulation
         editPrismDiv.style("display", "block");
