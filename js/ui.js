@@ -153,7 +153,6 @@ let sketchUI = function (p5_) {
       savePrismButton.style("top", `${points[0].y + 20}px`);
       savePrismButton.style("left", `${points[0].x + 20}px`);
     }
-    return false;
   };
 
   p5_.mouseReleased = function () {
@@ -454,11 +453,13 @@ let sketchUI = function (p5_) {
     deleteToggle.parent(menuDiv);
 
     reflectivitySlider = p5_.createSlider(0, 1, reflectivity, 0.1);
-    reflectivitySlider.mouseClicked((e) => {
-      e.stopPropagation();
+    reflectivitySlider.changed((e) => {
       // Change global reflectivity variable to the slider value
       reflectivity = reflectivitySlider.value();
       storeReflectionInUrl();
+    });
+    reflectivitySlider.mouseClicked((e) => {
+      e.stopPropagation();
     });
     reflectivitySlider.mousePressed((e) => {
       // stop photon from being created by dragging the slider
@@ -469,6 +470,10 @@ let sketchUI = function (p5_) {
       // stop photon from being created by dragging the slider
       // unfortunately there is no mouseDragged for the slider that I can stopPropagation on
       reflectivitySliderChanging = false;
+    });
+    reflectivitySlider.touchMoved((e) => {
+      // stop photon from being created by dragging the slider on mobile
+      e.stopPropagation();
     });
 
     reflectivitySlider.parent(menuDiv);
