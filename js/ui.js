@@ -153,6 +153,7 @@ let sketchUI = function (p5_) {
       savePrismButton.style("top", `${points[0].y + 20}px`);
       savePrismButton.style("left", `${points[0].x + 20}px`);
     }
+    return false;
   };
 
   p5_.mouseReleased = function () {
