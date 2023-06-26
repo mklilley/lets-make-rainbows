@@ -374,6 +374,11 @@ let sketchUI = function (p5_) {
     p5_.setDraftPrismReady(true);
   };
 
+  // Make sure canvas is always the same was as viewport
+  p5_.windowResized = function () {
+    p5_.resizeCanvas(p5_.windowWidth, p5_.windowHeight);
+  };
+
   // This function gets called every time a key is pressed
   p5_.keyPressed = function (e) {
     const numericRegex = /^[0-9]+$/; // Regex pattern to check if the pressed key is a number

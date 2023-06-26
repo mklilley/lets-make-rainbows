@@ -32,6 +32,11 @@ let sketchPrism = function (p5_) {
     });
   };
 
+  // Make sure canvas is always the same was as viewport
+  p5_.windowResized = function () {
+    p5_.resizeCanvas(p5_.windowWidth, p5_.windowHeight);
+  };
+
   // This function gets called every time a key is pressed
   p5_.keyPressed = function (e) {
     // Clear the prisms
