@@ -103,7 +103,7 @@ let sketchUI = function (p5_) {
         }
       }
       return false;
-    });
+    }
 
     canvas.mouseReleased(function (e) {
       if (!drawingMode && !deleteMode) {
