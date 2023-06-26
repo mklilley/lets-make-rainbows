@@ -191,7 +191,7 @@ let sketchUI = function (p5_) {
     isPaused = true;
     if (!drawingMode && !deleteMode && !reflectivitySliderChanging) {
       // This switches on the drawing of the photons
-      console.log("is draggin");
+      console.log("is dragging");
       if (
         p5_.abs(p5_.mouseX - startX) > 5 ||
         p5_.abs(p5_.mouseY - startY) > 5
