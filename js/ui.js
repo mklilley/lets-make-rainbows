@@ -49,10 +49,33 @@ let sketchUI = function (p5_) {
     //   )
     // );
 
-    canvas.mousePressed(function (e) {
-      console.log("mouse down");
+    function touched(e) {
+      console.log("touch down");
       isDragging = false;
+      pressTimer = setTimeout(function () {
+        if (menuDiv.style("display") === "none") {
+          menuDiv.style("display", "block");
+        }
+      }, 800); // time (in milliseconds) to wait before considering it a long press
 
+      // mouseX and mouseY won't work here because they only get registered on the end of the touch
+      startX = e.changedTouches[0].clientX;
+      startY = e.changedTouches[0].clientY;
+
+      // New prism is ready, but we want to allow user to interact with the vertices to scale or rotate
+      if (drawingMode && draftPrismReady) {
+        // If the user clicks on a vertex, store the index
+        for (let i = 0; i < points.length; i++) {
+          let point = points[i];
+          let d = p5_.dist(startX, startY, point.x, point.y);
+          if (d < 20) {
+            selectedVertexIndex = i;
+            return;
+          }
+        }
+      }
+      return false;
+    }
       pressTimer = setTimeout(function () {
         if (menuDiv.style("display") === "none") {
           menuDiv.style("display", "block");
@@ -98,7 +121,15 @@ let sketchUI = function (p5_) {
         storePhotonsInUrl();
       }
       return false;
-    });
+    }
+
+    if ("ontouchstart" in window) {
+      canvas.touchStarted(touched);
+      canvas.touchEnded(released);
+    } else {
+      canvas.mousePressed(pressed);
+      canvas.mouseReleased(released);
+    }
 
     // This function gets called every time a mouse button is pressed
     canvas.mouseClicked(function () {
