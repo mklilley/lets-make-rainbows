@@ -26,10 +26,12 @@ let sketchUI = function (p5_) {
 
   let selectedVertexIndex = -1; // No vertex selected initially. This is used to allow users to rotate or scale their new prisms
 
+  let canvas;
+
   // This function runs once during the program
   p5_.setup = function () {
     // Create a canvas element in the browser
-    let canvas = p5_.createCanvas(p5_.windowWidth, p5_.windowHeight);
+    canvas = p5_.createCanvas(p5_.windowWidth, p5_.windowHeight);
     canvas.position(0, 0); // Position the canvas at the top-left corner
     p5_.colorMode(p5_.RGB, 255, 255, 255, 100); // Set the color mode to RGB and opacity from 0 to 100
     p5_.strokeCap(p5_.SQUARE); // Set the style for rendering line endings
@@ -46,58 +48,123 @@ let sketchUI = function (p5_) {
     //     ) // Generate a regular polygon's vertices
     //   )
     // );
-  };
 
-  // This function gets called repeatedly and it's where you draw things
-  p5_.draw = function () {
-    p5_.clear();
-    p5_.noFill(); // No fill for shapes
-    p5_.stroke(255); // Set line color to white
-    p5_.strokeWeight(2); // Set line thickness to 2
-    p5_.beginShape(); // Start creating a custom shape
-    for (let v of points) {
-      p5_.vertex(v.x, v.y); // Add vertex to the custom shape
-      p5_.circle(v.x, v.y, 10); // Draw a circle for each vertex
-    }
-    p5_.endShape(draftPrismClosedOrOpen); // End of custom shape, can be open or closed.
+    canvas.mousePressed(function (e) {
+      console.log("mouse down");
+      isDragging = false;
 
-    if (isDragging && p5_.mouseIsPressed) {
-      endX = p5_.mouseX;
-      endY = p5_.mouseY;
-      photonDirection = p5_.createVector(endX - startX, endY - startY);
-      p5_.line(startX, startY, endX, endY);
-    }
-  };
+      pressTimer = setTimeout(function () {
+        if (menuDiv.style("display") === "none") {
+          menuDiv.style("display", "block");
+          // longPress = true;
+          // isPaused = true;
+        }
+      }, 800); // time (in milliseconds) to wait before considering it a long press
+      startX = p5_.mouseX;
+      startY = p5_.mouseY;
 
-  p5_.mousePressed = function () {
-    console.log("mouse down");
-    isDragging = false;
-
-    pressTimer = setTimeout(function () {
-      if (menuDiv.style("display") === "none") {
-        menuDiv.style("display", "block");
-        longPress = true;
-        isPaused = true;
-      }
-    }, 1000); // time (in milliseconds) to wait before considering it a long press
-    startX = p5_.mouseX;
-    startY = p5_.mouseY;
-
-    // New prism is ready, but we want to allow user to interact with the vertices to scale or rotate
-    if (drawingMode && draftPrismReady) {
-      // If the user clicks on a vertex, store the index
-      for (let i = 0; i < points.length; i++) {
-        let point = points[i];
-        let d = p5_.dist(startX, startY, point.x, point.y);
-        if (d < 20) {
-          selectedVertexIndex = i;
-          return;
+      // New prism is ready, but we want to allow user to interact with the vertices to scale or rotate
+      if (drawingMode && draftPrismReady) {
+        // If the user clicks on a vertex, store the index
+        for (let i = 0; i < points.length; i++) {
+          let point = points[i];
+          let d = p5_.dist(startX, startY, point.x, point.y);
+          if (d < 20) {
+            selectedVertexIndex = i;
+            return;
+          }
         }
       }
-    }
+      return false;
+    });
+
+    canvas.mouseReleased(function (e) {
+      if (!drawingMode && !deleteMode) {
+        isPaused = !isPaused;
+      }
+      console.log("mouse up");
+      clearTimeout(pressTimer);
+      selectedVertexIndex = -1; // We finished scaling/rotating a draft prism.
+      if (isDragging) {
+        p5Photons.createPhotons(
+          [startX, startY],
+          [endX - startX, endY - startY]
+        );
+        // Stores initial direction of photons so that we can restart the simulation and save data in the URL
+        photonsInit.push([
+          [startX, startY],
+          [endX - startX, endY - startY],
+        ]);
+        storePhotonsInUrl();
+      }
+      return false;
+    });
+
+    // This function gets called every time a mouse button is pressed
+    canvas.mouseClicked(function () {
+      console.log("mouse click");
+      if (isDragging) {
+        isDragging = false;
+        return;
+      }
+      if (drawingMode) {
+        if (draftPrismReady) {
+          return; // no click behaviour, we will be only be dragging prisms to move/rotate/scale
+        } else {
+          if (points.length > 2) {
+            // Check if the clicked point is close to the first point of the shape being drawn
+            let firstPoint = points[0];
+            let d = p5_.dist(
+              p5_.mouseX,
+              p5_.mouseY,
+              firstPoint.x,
+              firstPoint.y
+            );
+            if (d < 20) {
+              p5_.setDraftPrismReady(true);
+              return;
+            }
+          }
+          // If the click wasn't near the first point (or there are no points yet),
+          // create a new point at the click location and add it to the points array
+          points.push(p5_.createVector(p5_.mouseX, p5_.mouseY));
+        }
+      } else if (deleteMode) {
+        let prismIndex = -1;
+        let depth = 0;
+        // Check every prism to find whether we've clicked inside of it. Because prisms can be nested
+        // We have to use the "depth" parameter to find the "deepest" prism we are inside of
+        for (let i = 0; i < prisms.length; i++) {
+          const p = prisms[i];
+          if (p.isInside(p5_.mouseX, p5_.mouseY)) {
+            if (p.depth >= depth) {
+              depth = p.depth;
+              prismIndex = i;
+            }
+          }
+        }
+
+        if (prismIndex !== -1) {
+          // we clicked inside of a prism, so delete it
+          Prism.delete(prismIndex);
+        }
+      }
+      //  else {
+      //   if (!longPress) {
+      //     console.log("ordinary click");
+      //     // outside of drawing mode, click on the screen just pauses/unpauses simulation
+      //     isPaused = !isPaused;
+      //   } else {
+      //     console.log("long press happened");
+      //     // Reset longPress to false
+      //     longPress = false;
+      //   }
+      // }
+    });
   };
 
   p5_.mouseDragged = function () {
+    isPaused = true;
     if (!drawingMode && !deleteMode && !reflectivitySliderChanging) {
       // This switches on the drawing of the photons
       console.log("is draggin");
@@ -107,7 +174,7 @@ let sketchUI = function (p5_) {
       ) {
         clearTimeout(pressTimer);
         isDragging = true;
-        isPaused = true;
+        // isPaused = true;
       }
     } else if (drawingMode && draftPrismReady) {
       // This allows us to edit prisms that have recently been drafted
@@ -155,70 +222,24 @@ let sketchUI = function (p5_) {
     }
   };
 
-  p5_.mouseReleased = function () {
-    console.log("mouse up");
-    clearTimeout(pressTimer);
-    selectedVertexIndex = -1; // We finished scaling/rotating a draft prism.
-    if (isDragging) {
-      p5Photons.createPhotons([startX, startY], [endX - startX, endY - startY]);
-      // Stores initial direction of photons so that we can restart the simulation and save data in the URL
-      photonsInit.push([
-        [startX, startY],
-        [endX - startX, endY - startY],
-      ]);
-      storePhotonsInUrl();
+  // This function gets called repeatedly and it's where you draw things
+  p5_.draw = function () {
+    p5_.clear();
+    p5_.noFill(); // No fill for shapes
+    p5_.stroke(255); // Set line color to white
+    p5_.strokeWeight(2); // Set line thickness to 2
+    p5_.beginShape(); // Start creating a custom shape
+    for (let v of points) {
+      p5_.vertex(v.x, v.y); // Add vertex to the custom shape
+      p5_.circle(v.x, v.y, 10); // Draw a circle for each vertex
     }
-  };
+    p5_.endShape(draftPrismClosedOrOpen); // End of custom shape, can be open or closed.
 
-  // This function gets called every time a mouse button is pressed
-  p5_.mouseClicked = function () {
-    console.log("mouse click");
-    if (drawingMode) {
-      if (draftPrismReady) {
-        return; // no click behaviour, we will be only be dragging prisms to move/rotate/scale
-      } else {
-        if (points.length > 2) {
-          // Check if the clicked point is close to the first point of the shape being drawn
-          let firstPoint = points[0];
-          let d = p5_.dist(p5_.mouseX, p5_.mouseY, firstPoint.x, firstPoint.y);
-          if (d < 20) {
-            p5_.setDraftPrismReady(true);
-            return;
-          }
-        }
-        // If the click wasn't near the first point (or there are no points yet),
-        // create a new point at the click location and add it to the points array
-        points.push(p5_.createVector(p5_.mouseX, p5_.mouseY));
-      }
-    } else if (deleteMode) {
-      let prismIndex = -1;
-      let depth = 0;
-      // Check every prism to find whether we've clicked inside of it. Because prisms can be nested
-      // We have to use the "depth" parameter to find the "deepest" prism we are inside of
-      for (let i = 0; i < prisms.length; i++) {
-        const p = prisms[i];
-        if (p.isInside(p5_.mouseX, p5_.mouseY)) {
-          if (p.depth >= depth) {
-            depth = p.depth;
-            prismIndex = i;
-          }
-        }
-      }
-
-      if (prismIndex !== -1) {
-        // we clicked inside of a prism, so delete it
-        Prism.delete(prismIndex);
-      }
-    } else {
-      if (!longPress) {
-        console.log("ordinary click");
-        // outside of drawing mode, click on the screen just pauses/unpauses simulation
-        isPaused = !isPaused;
-      } else {
-        console.log("long press happened");
-        // Reset longPress to false
-        longPress = false;
-      }
+    if (isDragging && p5_.mouseIsPressed) {
+      endX = p5_.mouseX;
+      endY = p5_.mouseY;
+      photonDirection = p5_.createVector(endX - startX, endY - startY);
+      p5_.line(startX, startY, endX, endY);
     }
   };
 
@@ -287,7 +308,9 @@ let sketchUI = function (p5_) {
       savePrismButton.style("display", "block");
     } else {
       draftPrismClosedOrOpen = null;
-      savePrismButton.remove();
+      if (savePrismButton) {
+        savePrismButton.remove();
+      }
     }
     draftPrismReady = readyStatus;
   };
@@ -375,7 +398,7 @@ let sketchUI = function (p5_) {
     menuDiv.style("position", "absolute");
     menuDiv.style("top", "10px");
     menuDiv.style("left", "10px");
-    menuDiv.style("display", "none");
+    menuDiv.style("display", "block");
 
     editPrismDiv = p5_.createDiv();
     editPrismDiv.style("display", "none");
@@ -383,36 +406,29 @@ let sketchUI = function (p5_) {
 
     undoButton = p5_.createButton("Undo");
     undoButton.mouseClicked((e) => {
-      e.stopPropagation();
       p5_.undoPoint();
     });
     undoButton.parent(editPrismDiv);
 
     triangleButton = p5_.createButton("Triangle");
     triangleButton.mouseClicked((e) => {
-      e.stopPropagation();
       p5_.createTriangle();
     });
     triangleButton.parent(editPrismDiv);
 
     circleButton = p5_.createButton("Circle");
     circleButton.mouseClicked((e) => {
-      e.stopPropagation();
       p5_.createCircle();
     });
     circleButton.parent(editPrismDiv);
 
     squareButton = p5_.createButton("Square");
     squareButton.mouseClicked((e) => {
-      e.stopPropagation();
       p5_.createSquare();
     });
     squareButton.parent(editPrismDiv);
 
     prismToggle = p5_.createCheckbox("Create Prism Mode", false);
-    prismToggle.mouseClicked((e) => {
-      e.stopPropagation(); // to stop the click from triggering the canvas wide click event
-    });
 
     prismToggle.changed((e) => {
       drawingMode = prismToggle.checked();
@@ -435,9 +451,6 @@ let sketchUI = function (p5_) {
     prismToggle.parent(menuDiv);
 
     deleteToggle = p5_.createCheckbox("Delete Prism Mode", false);
-    deleteToggle.mouseClicked((e) => {
-      e.stopPropagation(); // to stop the click from triggering the canvas wide click event
-    });
 
     deleteToggle.changed((e) => {
       deleteMode = deleteToggle.checked();
@@ -458,9 +471,7 @@ let sketchUI = function (p5_) {
       reflectivity = reflectivitySlider.value();
       storeReflectionInUrl();
     });
-    reflectivitySlider.mouseClicked((e) => {
-      e.stopPropagation();
-    });
+
     reflectivitySlider.mousePressed((e) => {
       // stop photon from being created by dragging the slider
       // unfortunately there is no mouseDragged for the slider that I can stopPropagation on
@@ -471,6 +482,7 @@ let sketchUI = function (p5_) {
       // unfortunately there is no mouseDragged for the slider that I can stopPropagation on
       reflectivitySliderChanging = false;
     });
+
     reflectivitySlider.touchMoved((e) => {
       // stop photon from being created by dragging the slider on mobile
       e.stopPropagation();
@@ -480,21 +492,20 @@ let sketchUI = function (p5_) {
 
     hideButton = p5_.createButton("Hide controls");
     hideButton.mouseClicked((e) => {
-      e.stopPropagation();
       menuDiv.style("display", "none");
     });
     hideButton.parent(menuDiv);
 
     clearPhotonsButton = p5_.createButton("Clear light rays");
-    clearPhotonsButton.mouseClicked((e) => {
-      e.stopPropagation();
+
+    clearPhotonsButton.mousePressed((e) => {
       p5Photons.clearPhotons();
     });
+
     clearPhotonsButton.parent(menuDiv);
 
     clearPrismsButton = p5_.createButton("Clear prisms");
     clearPrismsButton.mouseClicked((e) => {
-      e.stopPropagation();
       p5Prisms.clearPrisms();
       p5_.clearPrismPoints();
     });
@@ -502,7 +513,6 @@ let sketchUI = function (p5_) {
 
     restartSimulationButton = p5_.createButton("Restart simulation");
     restartSimulationButton.mouseClicked((e) => {
-      e.stopPropagation();
       p5Photons.restartPhotons();
     });
     restartSimulationButton.parent(menuDiv);
