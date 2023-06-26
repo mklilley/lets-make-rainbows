@@ -184,17 +184,6 @@ let sketchUI = function (p5_) {
           Prism.delete(prismIndex);
         }
       }
-      //  else {
-      //   if (!longPress) {
-      //     console.log("ordinary click");
-      //     // outside of drawing mode, click on the screen just pauses/unpauses simulation
-      //     isPaused = !isPaused;
-      //   } else {
-      //     console.log("long press happened");
-      //     // Reset longPress to false
-      //     longPress = false;
-      //   }
-      // }
     });
   };
 
