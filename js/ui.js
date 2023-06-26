@@ -422,7 +422,7 @@ let sketchUI = function (p5_) {
     menuDiv.style("position", "absolute");
     menuDiv.style("top", "10px");
     menuDiv.style("left", "10px");
-    menuDiv.style("display", "block");
+    menuDiv.style("display", "none");
 
     editPrismDiv = p5_.createDiv();
     editPrismDiv.style("display", "none");
