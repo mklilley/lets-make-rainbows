@@ -105,7 +105,7 @@ let sketchUI = function (p5_) {
       return false;
     }
 
-    canvas.mouseReleased(function (e) {
+    function released(e) {
       if (!drawingMode && !deleteMode) {
         isPaused = !isPaused;
       }
