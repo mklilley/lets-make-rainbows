@@ -76,6 +76,10 @@ let sketchUI = function (p5_) {
       }
       return false;
     }
+
+    function pressed(e) {
+      console.log("mouse down");
+      isDragging = false;
       pressTimer = setTimeout(function () {
         if (menuDiv.style("display") === "none") {
           menuDiv.style("display", "block");
