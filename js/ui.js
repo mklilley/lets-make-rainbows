@@ -55,6 +55,8 @@ let sketchUI = function (p5_) {
       pressTimer = setTimeout(function () {
         if (menuDiv.style("display") === "none") {
           menuDiv.style("display", "block");
+          longPress = true;
+          isPaused = true;
         }
       }, 800); // time (in milliseconds) to wait before considering it a long press
 
