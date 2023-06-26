@@ -83,8 +83,8 @@ let sketchUI = function (p5_) {
       pressTimer = setTimeout(function () {
         if (menuDiv.style("display") === "none") {
           menuDiv.style("display", "block");
-          // longPress = true;
-          // isPaused = true;
+          longPress = true;
+          isPaused = true;
         }
       }, 800); // time (in milliseconds) to wait before considering it a long press
       startX = p5_.mouseX;
@@ -106,10 +106,13 @@ let sketchUI = function (p5_) {
     }
 
     function released(e) {
-      if (!drawingMode && !deleteMode) {
+      if (!drawingMode && !deleteMode & !longPress) {
         isPaused = !isPaused;
       }
-      console.log("mouse up");
+      if (longPress) {
+        longPress = false;
+      }
+      console.log("released");
       clearTimeout(pressTimer);
       selectedVertexIndex = -1; // We finished scaling/rotating a draft prism.
       if (isDragging) {
