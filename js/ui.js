@@ -194,60 +194,56 @@ let sketchUI = function (p5_) {
 
   p5_.mouseDragged = function () {
     isPaused = true;
-    if (!drawingMode && !deleteMode && !reflectivitySliderChanging) {
-      // This switches on the drawing of the photons
-      console.log("is dragging");
-      if (
-        p5_.abs(p5_.mouseX - startX) > 5 ||
-        p5_.abs(p5_.mouseY - startY) > 5
-      ) {
-        clearTimeout(pressTimer);
+    if (p5_.abs(p5_.mouseX - startX) > 5 || p5_.abs(p5_.mouseY - startY) > 5) {
+      clearTimeout(pressTimer);
+      if (!drawingMode && !deleteMode && !reflectivitySliderChanging) {
+        // This switches on the drawing of the photons
+        console.log("is dragging");
         isDragging = true;
-        // isPaused = true;
-      }
-    } else if (drawingMode && draftPrismReady) {
-      // This allows us to edit prisms that have recently been drafted
-      if (selectedVertexIndex !== -1) {
-        // User dragging on a vertex, so we should get ready to scale or rotate
-        let centroid = p5_.calculateCentroid(points);
-        let initialVector = p5.Vector.sub(
-          points[selectedVertexIndex],
-          centroid
-        );
-        let currentVector = p5.Vector.sub(
-          p5_.createVector(p5_.mouseX, p5_.mouseY),
-          centroid
-        );
+      } else if (drawingMode && draftPrismReady) {
+        // This allows us to edit prisms that have recently been drafted
+        if (selectedVertexIndex !== -1) {
+          // User dragging on a vertex, so we should get ready to scale or rotate
+          let centroid = p5_.calculateCentroid(points);
+          let initialVector = p5.Vector.sub(
+            points[selectedVertexIndex],
+            centroid
+          );
+          let currentVector = p5.Vector.sub(
+            p5_.createVector(p5_.mouseX, p5_.mouseY),
+            centroid
+          );
 
-        let initialDistance = initialVector.mag();
-        let currentDistance = currentVector.mag();
-        let scaleFactor = currentDistance / initialDistance;
+          let initialDistance = initialVector.mag();
+          let currentDistance = currentVector.mag();
+          let scaleFactor = currentDistance / initialDistance;
 
-        let initialAngle = initialVector.heading();
-        let currentAngle = currentVector.heading();
-        let angleDifference = currentAngle - initialAngle;
+          let initialAngle = initialVector.heading();
+          let currentAngle = currentVector.heading();
+          let angleDifference = currentAngle - initialAngle;
 
-        if (Math.abs(scaleFactor - 1) > 0.01) {
-          // This is a threshold to detect a significant scaling
-          points = p5_.scalePoints(points, scaleFactor, centroid);
-        } else if (Math.abs(angleDifference) > 0.01) {
-          // Threshold for significant rotation
-          points = p5_.rotatePoints(points, angleDifference, centroid);
+          if (Math.abs(scaleFactor - 1) > 0.01) {
+            // This is a threshold to detect a significant scaling
+            points = p5_.scalePoints(points, scaleFactor, centroid);
+          } else if (Math.abs(angleDifference) > 0.01) {
+            // Threshold for significant rotation
+            points = p5_.rotatePoints(points, angleDifference, centroid);
+          }
+        } else {
+          // User dragging elsewhere on the canvas so we should move the prism
+          endX = p5_.mouseX;
+          endY = p5_.mouseY;
+          moveVector = p5_.createVector(endX - startX, endY - startY);
+          points = points.map((point) => {
+            return p5.Vector.add(point, moveVector);
+          });
+          // need to reset the startX and startY position, otherwise the prism will accelerate off the canvas
+          startX = p5_.mouseX;
+          startY = p5_.mouseY;
         }
-      } else {
-        // User dragging elsewhere on the canvas so we should move the prism
-        endX = p5_.mouseX;
-        endY = p5_.mouseY;
-        moveVector = p5_.createVector(endX - startX, endY - startY);
-        points = points.map((point) => {
-          return p5.Vector.add(point, moveVector);
-        });
-        // need to reset the startX and startY position, otherwise the prism will accelerate off the canvas
-        startX = p5_.mouseX;
-        startY = p5_.mouseY;
+        savePrismButton.style("top", `${points[0].y + 20}px`);
+        savePrismButton.style("left", `${points[0].x + 20}px`);
       }
-      savePrismButton.style("top", `${points[0].y + 20}px`);
-      savePrismButton.style("left", `${points[0].x + 20}px`);
     }
   };
 
