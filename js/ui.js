@@ -53,8 +53,8 @@ let sketchUI = function (p5_) {
       console.log("touch down");
       isDragging = false;
       pressTimer = setTimeout(function () {
-        if (menu.style("display") === "none") {
-          menu.style("display", "block");
+        if (menu.class().split(" ").includes("hidden")) {
+          menu.removeClass("hidden");
           longPress = true;
           isPaused = true;
         }
@@ -83,8 +83,8 @@ let sketchUI = function (p5_) {
       console.log("mouse down");
       isDragging = false;
       pressTimer = setTimeout(function () {
-        if (menu.style("display") === "none") {
-          menu.style("display", "block");
+        if (menu.class().split(" ").includes("hidden")) {
+          menu.removeClass("hidden");
           longPress = true;
           isPaused = true;
         }
@@ -330,7 +330,7 @@ let sketchUI = function (p5_) {
       savePrismButton.style("position", "absolute");
       savePrismButton.style("top", `${points[0].y + 20}px`);
       savePrismButton.style("left", `${points[0].x + 20}px`);
-      savePrismButton.style("display", "block");
+      savePrismButton.removeClass("hidden");
     } else {
       draftPrismClosedOrOpen = null;
       if (savePrismButton) {
@@ -460,11 +460,11 @@ let sketchUI = function (p5_) {
         // Clear any unfinished prisms if user switches off drawing mode
         points = [];
         p5_.clear(); // Clear the pixels in the canvas
-        createPrismOptions.style("display", "none");
+        createPrismOptions.addClass("hidden");
         p5_.setDraftPrismReady(false);
       } else {
         isPaused = true; // Pause the simulation
-        createPrismOptions.style("display", "block");
+        createPrismOptions.removeClass("hidden");
         deleteToggle.checked(false);
         deleteToggle.elt.dispatchEvent(new Event("change"));
       }
@@ -475,13 +475,13 @@ let sketchUI = function (p5_) {
     deleteToggle.changed((e) => {
       deleteMode = deleteToggle.checked();
       if (deleteMode) {
-        deletePrismOptions.style("display", "block");
+        deletePrismOptions.removeClass("hidden");
         isPaused = true; // Pause the simulation
         prismToggle.checked(false);
         prismToggle.elt.dispatchEvent(new Event("change"));
         p5_.cursor(p5_.CROSS);
       } else {
-        deletePrismOptions.style("display", "none");
+        deletePrismOptions.addClass("hidden");
         p5_.cursor(p5_.ARROW);
       }
     });
@@ -512,7 +512,7 @@ let sketchUI = function (p5_) {
 
     hideButton = p5_.select("#hide");
     hideButton.mouseClicked((e) => {
-      menu.style("display", "none");
+      menu.addClass("hidden");
     });
 
     clearPhotonsButton = p5_.select("#clear-photons");
