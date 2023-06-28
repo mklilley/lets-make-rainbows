@@ -437,6 +437,9 @@ let sketchUI = function (p5_) {
 
     letsgoButton.mouseClicked((e) => {
       welcome.addClass("hidden");
+      if (prisms.length === 0) {
+        menu.removeClass("hidden");
+      }
     });
   };
 
