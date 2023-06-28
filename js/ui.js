@@ -42,18 +42,6 @@ let sketchUI = function (p5_) {
     p5_.createWelcomeScreen();
     p5_.createMenu(); // Adds menu to allow user to control the app using clicks/taps
 
-    // Instantiate a new Prism object using a regular polygon and add it to the prism array
-    // Prism.addPrism(
-    //   new Prism(
-    //     p5_.regularPolygonPoints(
-    //       p5_.width / 2,
-    //       p5_.height / 2,
-    //       p5_.min(p5_.width, p5_.height) * 0.25,
-    //       3
-    //     ) // Generate a regular polygon's vertices
-    //   )
-    // );
-
     function touched(e) {
       console.log("touch down");
       isDragging = false;
