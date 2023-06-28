@@ -14,7 +14,11 @@ let sketchUI = function (p5_) {
 
   let reflectivitySliderChanging = false; // keeps track of whether the user is adjusting the reactivity slider.
 
-  let menu, createPrismOptions, deletePrismOptions, createPrismControls; // Some DOM elements for UI
+  let menu,
+    createPrismOptions,
+    deletePrismOptions,
+    createPrismControls,
+    welcome; // Some DOM elements for UI
 
   let savePrismButton; // Will be attached to a draftPrism
 
@@ -428,7 +432,7 @@ let sketchUI = function (p5_) {
   };
 
   p5_.createWelcomeScreen = function () {
-    let welcome = p5_.select("#welcome");
+    welcome = p5_.select("#welcome");
     let letsgoButton = p5_.select("#lets-go");
 
     if (!localStorage.getItem("visited")) {
@@ -574,10 +578,10 @@ let sketchUI = function (p5_) {
       p5Photons.restartPhotons();
     });
 
-    // for (let child of menu.elt.children) {
-    //   child.style.color = "white";
-    //   child.style.background = "black";
-    // }
+    let showWelcomeButton = p5_.select("#show-welcome");
+    showWelcomeButton.mouseClicked((e) => {
+      welcome.removeClass("hidden");
+    });
   };
 
   // A valid shape is one in which lines don't cross each other. That includes comparing lines
