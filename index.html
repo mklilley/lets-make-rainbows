@@ -56,73 +56,233 @@
       #reflectivity-container input[type="range"] {
         flex: 1;
       }
+
+      #create-prism-controls {
+        margin-left: 20px;
+      }
+
+      .gg-minimize-alt {
+        box-sizing: border-box;
+        position: relative;
+        display: block;
+        transform: rotate(-45deg) scale(var(--ggs, 1));
+        width: 26px;
+        height: 2px;
+        border-left: 10px solid;
+        border-right: 10px solid;
+      }
+
+      .gg-minimize-alt::after,
+      .gg-minimize-alt::before {
+        content: "";
+        display: block;
+        box-sizing: border-box;
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-top: 2px solid;
+        top: -2px;
+      }
+
+      .gg-minimize-alt::before {
+        border-right: 2px solid;
+        left: -5px;
+        transform: rotate(45deg);
+      }
+
+      .gg-minimize-alt::after {
+        border-left: 2px solid;
+        right: -5px;
+        transform: rotate(-45deg);
+      }
     </style>
   </head>
   <body>
     <main></main>
     <!-- options menu -->
-    <div id="menu" class="hidden">
-      <button id="hide">Hide options</button>
-      <button id="undo" class="hidden">Undo</button>
-      <details>
-        <summary>Edit prisms</summary>
-        <label
-          ><input id="create" type="checkbox" /><span
-            >Create a prism</span
-          ></label
+    <div id="menu" class="">
+      <button id="hide">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
         >
-        <div id="create-options" class="hidden">
-          <p>
-            Tap to create your own shapes, or use ours. <br />
-            Drag corners of a completed shape to resize and rotate. <br />When
-            finished creating, uncheck the create box.
-          </p>
-
-          <button id="triangle">Triangle</button>
-          <button id="square">Square</button>
-          <button id="circle">Circle</button>
-          <br />
-        </div>
-        <hr />
-
-        <label
-          ><input id="delete" type="checkbox" /><span
-            >Delete a prism</span
-          ></label
-        >
-        <div id="delete-options" class="hidden">
-          <p>
-            Tap on a prism to delete it. <br />When finished deleting, uncheck
-            the delete box.
-          </p>
-        </div>
-      </details>
-      <details>
-        <summary>Change boundary</summary>
-        Boundary reflectivity
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-        <br />
-        <div id="reflectivity-container">
-          <span>0%</span>
-          <input
-            id="reflectivity-slider"
-            type="range"
-            min="0"
-            max="1"
-            step="0.1"
+          <path
+            d="M6.2253 4.81108C5.83477 4.42056 5.20161 4.42056 4.81108 4.81108C4.42056 5.20161 4.42056 5.83477 4.81108 6.2253L10.5858 12L4.81114 17.7747C4.42062 18.1652 4.42062 18.7984 4.81114 19.1889C5.20167 19.5794 5.83483 19.5794 6.22535 19.1889L12 13.4142L17.7747 19.1889C18.1652 19.5794 18.7984 19.5794 19.1889 19.1889C19.5794 18.7984 19.5794 18.1652 19.1889 17.7747L13.4142 12L19.189 6.2253C19.5795 5.83477 19.5795 5.20161 19.189 4.81108C18.7985 4.42056 18.1653 4.42056 17.7748 4.81108L12 10.5858L6.2253 4.81108Z"
+            fill="currentColor"
           />
-          <span>100%</span>
-        </div>
-      </details>
-      <details>
-        <summary>Reset options</summary>
-        <button id="clear-photons">Clear light rays</button>
-        <button id="clear-prisms">Clear prisms</button>
-        <button id="restart">Restart simulation</button>
-      </details>
+        </svg>
+      </button>
+      <button id="min">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20.0735 2L21.4877 3.41421L15.6378 9.26416H18.1824V11.2642H12.1824V5.26416H14.1824V7.89111L20.0735 2Z"
+            fill="currentColor"
+          />
+          <path
+            d="M11.1824 12.2642V18.2642H9.1824V15.8422L3.41421 21.6104L2 20.1962L7.93203 14.2642H5.1824V12.2642H11.1824Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+
+      <button id="max" class="hidden">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3 3H9V5H6.46173L11.3047 9.84298L9.8905 11.2572L5 6.3667V9H3V3Z"
+            fill="currentColor"
+          />
+          <path
+            d="M3 21H9V19H6.3764L11.3046 14.0718L9.89038 12.6576L5 17.548V15H3V21Z"
+            fill="currentColor"
+          />
+          <path
+            d="M15 21H21V15H19V17.5244L14.1332 12.6576L12.719 14.0718L17.6472 19H15V21Z"
+            fill="currentColor"
+          />
+          <path
+            d="M21 3H15V5H17.5619L12.7189 9.84301L14.1331 11.2572L19 6.39032V9H21V3Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+
+      <span id="create-prism-controls" class="hidden">
+        <button id="undo">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5.33929 4.46777H7.33929V7.02487C8.52931 6.08978 10.0299 5.53207 11.6607 5.53207C15.5267 5.53207 18.6607 8.66608 18.6607 12.5321C18.6607 16.3981 15.5267 19.5321 11.6607 19.5321C9.51025 19.5321 7.58625 18.5623 6.30219 17.0363L7.92151 15.8515C8.83741 16.8825 10.1732 17.5321 11.6607 17.5321C14.4222 17.5321 16.6607 15.2935 16.6607 12.5321C16.6607 9.77065 14.4222 7.53207 11.6607 7.53207C10.5739 7.53207 9.56805 7.87884 8.74779 8.46777L11.3393 8.46777V10.4678H5.33929V4.46777Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+
+        <button id="triangle">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M11.6603 5L3 20H20.3205L11.6603 5ZM11.6603 11L8.19615 17H15.1244L11.6603 11Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <button id="square">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M17 7H7V17H17V7ZM4 4V20H20V4H4Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <button id="circle">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+      </span>
+
+      <div id="menu-max">
+        <details>
+          <summary>Edit prisms</summary>
+          <label
+            ><input id="create" type="checkbox" /><span
+              >Create a prism</span
+            ></label
+          >
+          <div id="create-options" class="hidden">
+            <p>
+              Tap to create your own shapes, or use ours. <br />
+              Drag corners of a completed shape to resize and rotate. <br />When
+              finished creating, uncheck the create box.
+            </p>
+          </div>
+          <hr />
+
+          <label
+            ><input id="delete" type="checkbox" /><span
+              >Delete a prism</span
+            ></label
+          >
+          <div id="delete-options" class="hidden">
+            <p>
+              Tap on a prism to delete it. <br />When finished deleting, uncheck
+              the delete box.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Change boundary</summary>
+          Boundary reflectivity
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          <br />
+          <div id="reflectivity-container">
+            <span>0%</span>
+            <input
+              id="reflectivity-slider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+            />
+            <span>100%</span>
+          </div>
+        </details>
+        <details>
+          <summary>Reset options</summary>
+          <button id="clear-photons">Clear light rays</button>
+          <button id="clear-prisms">Clear prisms</button>
+          <button id="restart">Restart simulation</button>
+        </details>
+      </div>
     </div>
   </body>
 </html>

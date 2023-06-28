@@ -14,7 +14,7 @@ let sketchUI = function (p5_) {
 
   let reflectivitySliderChanging = false; // keeps track of whether the user is adjusting the reactivity slider.
 
-  let menu, createPrismOptions, deletePrismOptions, undoButton; // Some DOM elements for UI
+  let menu, createPrismOptions, deletePrismOptions, createPrismControls; // Some DOM elements for UI
 
   let savePrismButton; // Will be attached to a draftPrism
 
@@ -429,7 +429,26 @@ let sketchUI = function (p5_) {
     createPrismOptions = p5_.select("#create-options");
     deletePrismOptions = p5_.select("#delete-options");
 
-    undoButton = p5_.select("#undo");
+    let menumax = p5_.select("#menu-max");
+
+    minButton = p5_.select("#min");
+    maxButton = p5_.select("#max");
+
+    minButton.mouseClicked((e) => {
+      menumax.addClass("hidden");
+      minButton.addClass("hidden");
+      maxButton.removeClass("hidden");
+    });
+
+    maxButton.mouseClicked((e) => {
+      menumax.removeClass("hidden");
+      minButton.removeClass("hidden");
+      maxButton.addClass("hidden");
+    });
+
+    createPrismControls = p5_.select("#create-prism-controls");
+
+    let undoButton = p5_.select("#undo");
     undoButton.mouseClicked((e) => {
       p5_.undoPoint();
     });
@@ -461,12 +480,12 @@ let sketchUI = function (p5_) {
         points = [];
         p5_.clear(); // Clear the pixels in the canvas
         createPrismOptions.addClass("hidden");
-        undoButton.addClass("hidden");
+        createPrismControls.addClass("hidden");
         p5_.setDraftPrismReady(false);
       } else {
         isPaused = true; // Pause the simulation
         createPrismOptions.removeClass("hidden");
-        undoButton.removeClass("hidden");
+        createPrismControls.removeClass("hidden");
         deleteToggle.checked(false);
         deleteToggle.elt.dispatchEvent(new Event("change"));
       }
