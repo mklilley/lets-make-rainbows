@@ -39,8 +39,8 @@ let sketchUI = function (p5_) {
     canvas.position(0, 0); // Position the canvas at the top-left corner
     p5_.colorMode(p5_.RGB, 255, 255, 255, 100); // Set the color mode to RGB and opacity from 0 to 100
     p5_.strokeCap(p5_.SQUARE); // Set the style for rendering line endings
-    p5_.createWelcomeScreen();
     p5_.createMenu(); // Adds menu to allow user to control the app using clicks/taps
+    p5_.welcome();
 
     function touched(e) {
       console.log("touch down");
@@ -419,7 +419,7 @@ let sketchUI = function (p5_) {
     p5_.clear(); // Clear the pixels in the  canvas
   };
 
-  p5_.createWelcomeScreen = function () {
+  p5_.welcome = function () {
     welcome = p5_.select("#welcome");
     let letsgoButton = p5_.select("#lets-go");
 
@@ -429,6 +429,10 @@ let sketchUI = function (p5_) {
       // Then set the 'visited' item in LocalStorage so the welcome modal
       // will not be shown the next time the user visits the site
       localStorage.setItem("visited", "true");
+    } else {
+      if (prisms.length === 0) {
+        menu.removeClass("hidden");
+      }
     }
 
     letsgoButton.mouseClicked((e) => {
