@@ -14,7 +14,7 @@ let sketchUI = function (p5_) {
 
   let reflectivitySliderChanging = false; // keeps track of whether the user is adjusting the reactivity slider.
 
-  let menuDiv, editPrismDiv; // Will contain DOM elements for UI
+  let menu, createPrismOptions, deletePrismOptions; // Will contain DOM elements for UI
 
   let savePrismButton; // Will be attached to a draftPrism
 
@@ -53,8 +53,8 @@ let sketchUI = function (p5_) {
       console.log("touch down");
       isDragging = false;
       pressTimer = setTimeout(function () {
-        if (menuDiv.style("display") === "none") {
-          menuDiv.style("display", "block");
+        if (menu.style("display") === "none") {
+          menu.style("display", "block");
           longPress = true;
           isPaused = true;
         }
@@ -83,8 +83,8 @@ let sketchUI = function (p5_) {
       console.log("mouse down");
       isDragging = false;
       pressTimer = setTimeout(function () {
-        if (menuDiv.style("display") === "none") {
-          menuDiv.style("display", "block");
+        if (menu.style("display") === "none") {
+          menu.style("display", "block");
           longPress = true;
           isPaused = true;
         }
@@ -424,41 +424,32 @@ let sketchUI = function (p5_) {
   };
 
   p5_.createMenu = function () {
-    menuDiv = p5_.createDiv();
-    menuDiv.style("position", "absolute");
-    menuDiv.style("top", "10px");
-    menuDiv.style("left", "10px");
-    menuDiv.style("display", "none");
+    menu = p5_.select("#menu");
 
-    editPrismDiv = p5_.createDiv();
-    editPrismDiv.style("display", "none");
-    editPrismDiv.parent(menuDiv);
+    createPrismOptions = p5_.select("#create-options");
+    deletePrismOptions = p5_.select("#delete-options");
 
-    undoButton = p5_.createButton("Undo");
+    undoButton = p5_.select("#undo");
     undoButton.mouseClicked((e) => {
       p5_.undoPoint();
     });
-    undoButton.parent(editPrismDiv);
 
-    triangleButton = p5_.createButton("Triangle");
+    triangleButton = p5_.select("#triangle");
     triangleButton.mouseClicked((e) => {
       p5_.createTriangle();
     });
-    triangleButton.parent(editPrismDiv);
 
-    circleButton = p5_.createButton("Circle");
+    circleButton = p5_.select("#circle");
     circleButton.mouseClicked((e) => {
       p5_.createCircle();
     });
-    circleButton.parent(editPrismDiv);
 
-    squareButton = p5_.createButton("Square");
+    squareButton = p5_.select("#square");
     squareButton.mouseClicked((e) => {
       p5_.createSquare();
     });
-    squareButton.parent(editPrismDiv);
 
-    prismToggle = p5_.createCheckbox("Create Prism Mode", false);
+    prismToggle = p5_.select("#create");
 
     prismToggle.changed((e) => {
       drawingMode = prismToggle.checked();
@@ -469,33 +460,34 @@ let sketchUI = function (p5_) {
         // Clear any unfinished prisms if user switches off drawing mode
         points = [];
         p5_.clear(); // Clear the pixels in the canvas
-        editPrismDiv.style("display", "none");
+        createPrismOptions.style("display", "none");
         p5_.setDraftPrismReady(false);
       } else {
         isPaused = true; // Pause the simulation
-        editPrismDiv.style("display", "block");
+        createPrismOptions.style("display", "block");
         deleteToggle.checked(false);
         deleteToggle.elt.dispatchEvent(new Event("change"));
       }
     });
-    prismToggle.parent(menuDiv);
 
-    deleteToggle = p5_.createCheckbox("Delete Prism Mode", false);
+    deleteToggle = p5_.select("#delete");
 
     deleteToggle.changed((e) => {
       deleteMode = deleteToggle.checked();
       if (deleteMode) {
+        deletePrismOptions.style("display", "block");
         isPaused = true; // Pause the simulation
         prismToggle.checked(false);
         prismToggle.elt.dispatchEvent(new Event("change"));
         p5_.cursor(p5_.CROSS);
       } else {
+        deletePrismOptions.style("display", "none");
         p5_.cursor(p5_.ARROW);
       }
     });
-    deleteToggle.parent(menuDiv);
 
-    reflectivitySlider = p5_.createSlider(0, 1, reflectivity, 0.1);
+    reflectivitySlider = p5_.select("#reflectivity-slider");
+    reflectivitySlider.value(reflectivity);
     reflectivitySlider.changed((e) => {
       // Change global reflectivity variable to the slider value
       reflectivity = reflectivitySlider.value();
@@ -518,39 +510,32 @@ let sketchUI = function (p5_) {
       e.stopPropagation();
     });
 
-    reflectivitySlider.parent(menuDiv);
-
-    hideButton = p5_.createButton("Hide controls");
+    hideButton = p5_.select("#hide");
     hideButton.mouseClicked((e) => {
-      menuDiv.style("display", "none");
+      menu.style("display", "none");
     });
-    hideButton.parent(menuDiv);
 
-    clearPhotonsButton = p5_.createButton("Clear light rays");
+    clearPhotonsButton = p5_.select("#clear-photons");
 
     clearPhotonsButton.mousePressed((e) => {
       p5Photons.clearPhotons();
     });
 
-    clearPhotonsButton.parent(menuDiv);
-
-    clearPrismsButton = p5_.createButton("Clear prisms");
+    clearPrismsButton = p5_.select("#clear-prisms");
     clearPrismsButton.mouseClicked((e) => {
       p5Prisms.clearPrisms();
       p5_.clearPrismPoints();
     });
-    clearPrismsButton.parent(menuDiv);
 
-    restartSimulationButton = p5_.createButton("Restart simulation");
+    restartSimulationButton = p5_.select("#restart");
     restartSimulationButton.mouseClicked((e) => {
       p5Photons.restartPhotons();
     });
-    restartSimulationButton.parent(menuDiv);
 
-    for (let child of menuDiv.elt.children) {
-      child.style.color = "white";
-      child.style.background = "black";
-    }
+    // for (let child of menu.elt.children) {
+    //   child.style.color = "white";
+    //   child.style.background = "black";
+    // }
   };
 
   // A valid shape is one in which lines don't cross each other. That includes comparing lines
