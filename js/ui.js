@@ -14,7 +14,7 @@ let sketchUI = function (p5_) {
 
   let reflectivitySliderChanging = false; // keeps track of whether the user is adjusting the reactivity slider.
 
-  let menu, createPrismOptions, deletePrismOptions; // Will contain DOM elements for UI
+  let menu, createPrismOptions, deletePrismOptions, undoButton; // Some DOM elements for UI
 
   let savePrismButton; // Will be attached to a draftPrism
 
@@ -461,10 +461,12 @@ let sketchUI = function (p5_) {
         points = [];
         p5_.clear(); // Clear the pixels in the canvas
         createPrismOptions.addClass("hidden");
+        undoButton.addClass("hidden");
         p5_.setDraftPrismReady(false);
       } else {
         isPaused = true; // Pause the simulation
         createPrismOptions.removeClass("hidden");
+        undoButton.removeClass("hidden");
         deleteToggle.checked(false);
         deleteToggle.elt.dispatchEvent(new Event("change"));
       }
