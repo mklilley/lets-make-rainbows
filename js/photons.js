@@ -165,7 +165,6 @@ let sketchPhotons = function (p5_) {
   p5_.loadReflectivityFromUrl = function () {
     let params = new URLSearchParams(window.location.search);
     let refString = params.get("ref");
-    console.log(refString);
     if (refString) {
       reflectivity = parseFloat(refString);
 
