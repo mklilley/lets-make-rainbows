@@ -434,22 +434,22 @@ let sketchUI = function (p5_) {
       p5_.undoPoint();
     });
 
-    triangleButton = p5_.select("#triangle");
+    let triangleButton = p5_.select("#triangle");
     triangleButton.mouseClicked((e) => {
       p5_.createTriangle();
     });
 
-    circleButton = p5_.select("#circle");
+    let circleButton = p5_.select("#circle");
     circleButton.mouseClicked((e) => {
       p5_.createCircle();
     });
 
-    squareButton = p5_.select("#square");
+    let squareButton = p5_.select("#square");
     squareButton.mouseClicked((e) => {
       p5_.createSquare();
     });
 
-    prismToggle = p5_.select("#create");
+    let prismToggle = p5_.select("#create");
 
     prismToggle.changed((e) => {
       drawingMode = prismToggle.checked();
@@ -470,7 +470,7 @@ let sketchUI = function (p5_) {
       }
     });
 
-    deleteToggle = p5_.select("#delete");
+    let deleteToggle = p5_.select("#delete");
 
     deleteToggle.changed((e) => {
       deleteMode = deleteToggle.checked();
@@ -486,7 +486,7 @@ let sketchUI = function (p5_) {
       }
     });
 
-    reflectivitySlider = p5_.select("#reflectivity-slider");
+    let reflectivitySlider = p5_.select("#reflectivity-slider");
     reflectivitySlider.value(reflectivity);
     reflectivitySlider.changed((e) => {
       // Change global reflectivity variable to the slider value
@@ -515,19 +515,19 @@ let sketchUI = function (p5_) {
       menu.addClass("hidden");
     });
 
-    clearPhotonsButton = p5_.select("#clear-photons");
+    let clearPhotonsButton = p5_.select("#clear-photons");
 
     clearPhotonsButton.mousePressed((e) => {
       p5Photons.clearPhotons();
     });
 
-    clearPrismsButton = p5_.select("#clear-prisms");
+    let clearPrismsButton = p5_.select("#clear-prisms");
     clearPrismsButton.mouseClicked((e) => {
       p5Prisms.clearPrisms();
       p5_.clearPrismPoints();
     });
 
-    restartSimulationButton = p5_.select("#restart");
+    let restartSimulationButton = p5_.select("#restart");
     restartSimulationButton.mouseClicked((e) => {
       p5Photons.restartPhotons();
     });
