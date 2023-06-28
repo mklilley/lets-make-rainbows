@@ -128,6 +128,7 @@ let sketchUI = function (p5_) {
           [endX - startX, endY - startY],
         ]);
         storePhotonsInUrl();
+        isDragging = false;
       }
       return false;
     }
@@ -143,10 +144,6 @@ let sketchUI = function (p5_) {
     // This function gets called every time a mouse button is pressed
     canvas.mouseClicked(function () {
       console.log("mouse click");
-      if (isDragging) {
-        isDragging = false;
-        return;
-      }
       if (drawingMode) {
         if (draftPrismReady) {
           return; // no click behaviour, we will be only be dragging prisms to move/rotate/scale
