@@ -33,7 +33,92 @@
       input[type="range"] {
         accent-color: var(--accent);
       }
+
+      .hidden {
+        display: none;
+      }
+
+      #menu {
+        position: absolute;
+        margin: 10px;
+      }
+      #reflectivity-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+      }
+
+      #reflectivity-container input[type="range"] {
+        flex: 1;
+      }
     </style>
   </head>
-  <body></body>
+  <body>
+    <main></main>
+    <!-- options menu -->
+    <div id="menu" class="hidden">
+      <button id="hide">Hide options</button>
+      <details>
+        <summary>Edit prisms</summary>
+        <label
+          ><input id="create" type="checkbox" /><span
+            >Create a prism</span
+          ></label
+        >
+        <div id="create-options" class="hidden">
+          <p>
+            Tap to create your own shapes, or use ours. <br />
+            Drag corners of a completed shape to resize and rotate. <br />When
+            finished creating, uncheck the create box.
+          </p>
+
+          <button id="triangle">Triangle</button>
+          <button id="square">Square</button>
+          <button id="circle">Circle</button>
+          <br />
+
+          <button id="undo">Undo</button>
+        </div>
+        <hr />
+
+        <label
+          ><input id="delete" type="checkbox" /><span
+            >Delete a prism</span
+          ></label
+        >
+        <div id="delete-options" class="hidden">
+          <p>
+            Tap on a prism to delete it. <br />When finished deleting, uncheck
+            the delete box.
+          </p>
+        </div>
+      </details>
+      <details>
+        <summary>Change boundary</summary>
+        Boundary reflectivity
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <br />
+        <div id="reflectivity-container">
+          <span>0%</span>
+          <input
+            id="reflectivity-slider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.1"
+          />
+          <span>100%</span>
+        </div>
+      </details>
+      <details>
+        <summary>Reset options</summary>
+        <button id="clear-photons">Clear light rays</button>
+        <button id="clear-prisms">Clear prisms</button>
+        <button id="restart">Restart simulation</button>
+      </details>
+    </div>
+  </body>
 </html>
