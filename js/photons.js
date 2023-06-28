@@ -87,16 +87,19 @@ let sketchPhotons = function (p5_) {
   p5_.createPhotons = function (position, direction) {
     let u; // normalised velocity vector
     let pos; // starting position for the photons
+
     // Colors for the 6 different photons
+    // https://405nm.com/color-to-wavelength/
     const colors = [
-      [255, 0, 0], // red
-      [255, 165, 0], // orange
-      [255, 255, 0], // yellow
-      [0, 255, 0], // green
-      [0, 0, 255], // blue
-      [128, 0, 128], // purple
+      [255, 0, 0], // red 645nm
+      [255, 165, 0], // orange 607nm
+      [255, 255, 0], // yellow 607nm
+      [0, 255, 0], // green 510nm
+      [0, 0, 255], // blue 440nm
+      [128, 0, 128], // purple 388nm
     ];
     // Refractive indices for the 6 different photons
+    // Exaggerated differences between colours
     const refrIndices = [
       1.51, // red
       1.52, // orange
