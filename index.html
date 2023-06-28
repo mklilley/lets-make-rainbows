@@ -27,6 +27,22 @@
         height: 100%;
         width: 100%;
       }
+
+      body > * {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin: 0;
+      }
+
+      h1,
+      h2 {
+        text-align: center;
       }
 
       :root {
@@ -98,10 +114,57 @@
         right: -5px;
         transform: rotate(-45deg);
       }
+
+      #welcome {
+        overflow: auto;
+        z-index: 3;
+        position: relative;
+        /* width: 80vw;
+        height: 200px; */
+        /* border-radius: 5px; */
+        background: linear-gradient(
+          135deg,
+          rgba(255, 0, 0, 1) 0%,
+          #ffa500 20%,
+          rgba(255, 255, 0, 1) 40%,
+          rgba(0, 255, 0, 1) 60%,
+          rgba(0, 0, 255, 1) 80%,
+          rgba(128, 0, 128, 1) 100%
+        );
+      }
+
+      #welcome .notice {
+        background-color: rgba(245, 247, 255, 0.8);
+      }
+
+      #welcome button {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+        display: block;
+        /* font-weight: bold; */
+        color: white;
+        background-color: rgba(245, 247, 255, 0.25);
+        border-image: linear-gradient(
+            135deg,
+            rgba(128, 0, 128, 1) 0%,
+            rgba(0, 0, 255, 1) 20%,
+            rgba(0, 255, 0, 1) 40%,
+            rgba(255, 255, 0, 1) 60%,
+            #ffa500 80%,
+            rgba(255, 0, 0, 1) 100%
+          )
+          3;
+        border-width: 3px;
+        border-style: solid;
+      }
     </style>
   </head>
   <body>
     <main></main>
+
     <!-- options menu -->
     <div id="menu" class="hidden">
       <button id="hide">
@@ -286,6 +349,60 @@
           <button id="restart">Restart simulation</button>
         </details>
       </div>
+    </div>
+
+    <!-- Welcome modal -->
+
+    <div id="welcome" class="notice hidden">
+      <h2>Let's make rainbows</h2>
+      <div class="notice">
+        <h3>Why?</h3>
+        <p>The why</p>
+      </div>
+
+      <div class="notice">
+        <h3>How?</h3>
+        <ul>
+          <li><b>Tap</b> to start/stop the simulation</li>
+          <li><b>Drag</b> to make new light rays</li>
+          <li><b>Hold</b> to create new prisms and more</li>
+        </ul>
+      </div>
+
+      <div class="notice">
+        <h3>🌈 Templates</h3>
+        <ul>
+          <li><a href="/">Blank canvas</a> - you make the rules</li>
+          <li>
+            <a
+              href="/?ref=0&prisms=351.38_515.83-40.83_514.46-197.29_246.21&photons=p13.24_411.02d107.04_-33.83"
+              >Classic prism</a
+            >
+            - the one you saw at school
+          </li>
+          <li>
+            <a
+              href="?ref=0.7&prisms=203.00_16.00-24.00_582.00-220.00_374.00-393.00_577.00&photons=p180.19_21.71d-12.57_246.86"
+              >Star trek prism</a
+            >
+            - because I love Star Trek
+          </li>
+          <li>
+            <a
+              href="?ref=0&prisms=382_174-345_296-478_219%7E189_296-174_399-304_332%7E630_221-601_325-718_288%7E429_389-406_474-550_440%7E201_750-260_561-316_727%7E395_603-484_681-539_564%7E144_81-174_129-205_67%7E523_106-557_163-603_88%7E762_78-791_136-801_53%7E697_563-697_423-788_457%7E549_715-637_758-640_709%7E68_477-72_646-183_481%7E759_249-862_158-858_333%7E56_244-7_320-84_409%7E262_205-330_184-304_261%7E727_580-627_659-730_745%7E714_201-775_175-733_242%7E202_762-132_698-157_790%7E656_433-555_475-657_593"
+              >Prism maze game</a
+            >
+            - make a light ray of at the top and try to get all the colours to
+            the bottom.
+          </li>
+        </ul>
+        <p>
+          Whatever you make here is sharable - just copy the URL. I can't wait
+          to see what you come up with.
+        </p>
+      </div>
+
+      <button id="lets-go"><h4>Let's make rainbows!</h4></button>
     </div>
   </body>
 </html>

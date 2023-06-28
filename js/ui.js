@@ -35,6 +35,7 @@ let sketchUI = function (p5_) {
     canvas.position(0, 0); // Position the canvas at the top-left corner
     p5_.colorMode(p5_.RGB, 255, 255, 255, 100); // Set the color mode to RGB and opacity from 0 to 100
     p5_.strokeCap(p5_.SQUARE); // Set the style for rendering line endings
+    p5_.createWelcomeScreen();
     p5_.createMenu(); // Adds menu to allow user to control the app using clicks/taps
 
     // Instantiate a new Prism object using a regular polygon and add it to the prism array
@@ -424,6 +425,23 @@ let sketchUI = function (p5_) {
     isPaused = true;
     points = [];
     p5_.clear(); // Clear the pixels in the  canvas
+  };
+
+  p5_.createWelcomeScreen = function () {
+    let welcome = p5_.select("#welcome");
+    let letsgoButton = p5_.select("#lets-go");
+
+    if (!localStorage.getItem("visited")) {
+      welcome.removeClass("hidden"); //show the welcome modal
+
+      // Then set the 'visited' item in LocalStorage so the welcome modal
+      // will not be shown the next time the user visits the site
+      localStorage.setItem("visited", "true");
+    }
+
+    letsgoButton.mouseClicked((e) => {
+      welcome.addClass("hidden");
+    });
   };
 
   p5_.createMenu = function () {
