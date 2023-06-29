@@ -372,7 +372,7 @@ let sketchUI = function (p5_) {
     const numericRegex = /^[0-9]+$/; // Regex pattern to check if the pressed key is a number
     if (numericRegex.test(p5_.key)) {
       const newNumSides = parseInt(p5_.key);
-      if (newNumSides <= 9 && newNumSides >= 3) {
+      if (newNumSides <= 9 && newNumSides >= 3 && drawingMode) {
         // Adds a new Prism with the number of sides equal to the number pressed
         points = p5_.regularPolygonPoints(
           p5_.width / 2,
@@ -380,25 +380,11 @@ let sketchUI = function (p5_) {
           p5_.min(p5_.width, p5_.height) * 0.25,
           newNumSides
         );
-
-        let isValidShape = p5_.validateShape(points);
-        if (isValidShape) {
-          // Create a new Prism with the clicked points
-          Prism.addPrism(new Prism(points));
-          storePrismsInUrl();
-          p5_.clearPrismPoints();
-        } else {
-          // If the shape is not valid, inform the user
-          alert("Invalid shape! Lines cannot intersect.");
-          console.error("Invalid shape! Lines cannot intersect.");
-        }
+        p5_.setDraftPrismReady(true);
       }
     } else {
-      if (p5_.key === "u" || p5_.key === "U") {
+      if ((p5_.key === "u" || p5_.key === "U") && drawingMode) {
         p5_.undoPoint();
-      }
-      if (p5_.key === "c" || p5_.key === "C") {
-        p5_.clearPrismPoints();
       }
     }
   };
