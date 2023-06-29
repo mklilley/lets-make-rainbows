@@ -546,22 +546,34 @@ let sketchUI = function (p5_) {
 
     clearPhotonsButton.mousePressed((e) => {
       p5Photons.clearPhotons();
+      minButton.addClass("hidden"); // hide the menu minimisation button
+      maxButton.removeClass("hidden"); // show the menu maximisation button
+      menumax.addClass("hidden"); // switch menu to minimised form
     });
 
     let clearPrismsButton = p5_.select("#clear-prisms");
     clearPrismsButton.mouseClicked((e) => {
       p5Prisms.clearPrisms();
       p5_.clearPrismPoints();
+      minButton.addClass("hidden"); // hide the menu minimisation button
+      maxButton.removeClass("hidden"); // show the menu maximisation button
+      menumax.addClass("hidden"); // switch menu to minimised form
     });
 
     let resetSimulationButton = p5_.select("#reset");
     resetSimulationButton.mouseClicked((e) => {
       p5Photons.resetPhotons();
+      minButton.addClass("hidden"); // hide the menu minimisation button
+      maxButton.removeClass("hidden"); // show the menu maximisation button
+      menumax.addClass("hidden"); // switch menu to minimised form
     });
 
     let showWelcomeButton = p5_.select("#show-welcome");
     showWelcomeButton.mouseClicked((e) => {
       welcome.removeClass("hidden");
+      minButton.addClass("hidden"); // hide the menu minimisation button
+      maxButton.removeClass("hidden"); // show the menu maximisation button
+      menumax.addClass("hidden"); // switch menu to minimised form
     });
   };
 
