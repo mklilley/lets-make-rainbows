@@ -37,25 +37,6 @@ let sketchPrism = function (p5_) {
     p5_.resizeCanvas(p5_.windowWidth, p5_.windowHeight);
   };
 
-  // This function gets called every time a key is pressed
-  p5_.keyPressed = function (e) {
-    // Clear the prisms
-    if (p5_.key === "c" || p5_.key === "C") {
-      isPaused = true;
-      prisms = [];
-      window.history.pushState({}, document.title, "/");
-      p5_.clear(); // Clear the pixels in the  canvas
-    }
-    // hide the prisms and just display the photons
-    if (p5_.key === "h" || p5_.key === "H") {
-      if (canvas.style("display") === "none") {
-        canvas.show();
-      } else {
-        canvas.hide();
-      }
-    }
-  };
-
   p5_.clearPrisms = function () {
     isPaused = true;
     prisms = [];
