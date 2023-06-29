@@ -64,7 +64,6 @@ let sketchPrism = function (p5_) {
       try {
         p5_.stringToPrisms(prismString);
       } catch (e) {
-        console.log(e);
         // Show a confirm dialog to the user
         let confirmed = confirm(
           "An error occurred while loading prisms from the URL. Would you like to reload the page?"

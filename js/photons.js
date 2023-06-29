@@ -130,7 +130,6 @@ let sketchPhotons = function (p5_) {
       try {
         p5_.stringToPhotons(photonString);
       } catch (e) {
-        console.log(e);
         // Show a confirm dialog to the user
         let confirmed = confirm(
           "An error occurred while loading photons from the URL. Would you like to reload the page?"

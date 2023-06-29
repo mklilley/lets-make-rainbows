@@ -245,7 +245,6 @@ let sketchUI = function (p5_) {
 
         const currentLeft = parseInt(menu.style("left")); //strips the "px"
         const currentTop = parseInt(menu.style("top")); //strips the "px"
-        console.log(currentLeft, currentTop);
 
         menu.style("left", `${currentLeft + (endX - startX)}px`);
         menu.style("top", `${currentTop + (endY - startY)}px`);
