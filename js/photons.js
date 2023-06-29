@@ -45,27 +45,6 @@ let sketchPhotons = function (p5_) {
     p5_.image(snapshot, 0, 0); // Draw the snapshot onto the newly resized canvas
   };
 
-  // p5 keyPressed function checks every time a key is pressed.
-  p5_.keyPressed = function (e) {
-    // If the key pressed was 's' or 'S', toggle the paused state
-    if (p5_.key === "s" || p5_.key === "S") {
-      isPaused = !isPaused;
-    }
-    // If the key pressed was 'r' or 'R', re-initialize the photons, clear the canvas and set the paused state to false
-    if (p5_.key === "r" || p5_.key === "R") {
-      p5_.restartPhotons();
-    }
-    // Clear the photons
-    if (
-      p5_.key === "c" ||
-      p5_.key === "C" ||
-      p5_.key === "o" ||
-      p5_.key === "O"
-    ) {
-      p5_.clearPhotons();
-    }
-  };
-
   p5_.clearPhotons = function () {
     isPaused = true;
     photons = [];
