@@ -314,7 +314,7 @@ let sketchUI = function (p5_) {
     if (readyStatus) {
       draftPrismClosedOrOpen = p5_.CLOSE;
 
-      savePrismButton = p5_.createButton("Save Prism");
+      savePrismButton = p5_.createButton("Save");
       savePrismButton.mouseClicked((e) => {
         e.stopPropagation();
         p5_.commitNewPrism();
