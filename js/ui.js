@@ -450,7 +450,7 @@ let sketchUI = function (p5_) {
     });
 
     let createPrismControls = p5_.select("#create-prism-controls"); // undo, triangle, circle, sqaure
-    let editPrismControls = p5_.select("#edit-prism-controls"); // create, delete
+    let controls = p5_.select("#controls"); // create, delete, restart etc
 
     let undoButton = p5_.select("#undo");
     undoButton.mouseClicked((e) => {
@@ -476,7 +476,7 @@ let sketchUI = function (p5_) {
       drawingMode = true;
       isPaused = true;
       createPrismControls.removeClass("hidden"); // show the undo, triangle, circle and square buttons
-      editPrismControls.addClass("hidden"); //hide the create,delete buttons
+      controls.addClass("hidden"); //hide the create,delete buttons
       doneButton.removeClass("hidden"); // show the done button
       minButton.addClass("hidden"); // hide the menu minimisation button
       maxButton.addClass("hidden"); // hide the menu minimisation button
@@ -486,7 +486,7 @@ let sketchUI = function (p5_) {
     deleteButton.mouseClicked((e) => {
       deleteMode = true;
       isPaused = true;
-      editPrismControls.addClass("hidden"); //hide the create,delete buttons
+      controls.addClass("hidden"); //hide the create,delete buttons
       doneButton.removeClass("hidden"); // show the done button
       minButton.addClass("hidden"); // hide the menu minimisation button
       maxButton.addClass("hidden"); // hide the menu minimisation button
@@ -498,7 +498,7 @@ let sketchUI = function (p5_) {
       if (drawingMode) {
         drawingMode = false;
         createPrismControls.addClass("hidden"); // hide the undo, triangle, circle and square buttons
-        editPrismControls.removeClass("hidden"); // show the create,delete buttons
+        controls.removeClass("hidden"); // show the create,delete buttons
 
         // Clear any unfinished prisms if user switches off drawing mode
         points = [];
@@ -506,7 +506,7 @@ let sketchUI = function (p5_) {
         p5_.setDraftPrismReady(false);
       } else {
         deleteMode = false;
-        editPrismControls.removeClass("hidden"); // show the create,delete buttons
+        controls.removeClass("hidden"); // show the create,delete buttons
         p5_.cursor(p5_.ARROW);
       }
       doneButton.addClass("hidden"); // hide the done button
