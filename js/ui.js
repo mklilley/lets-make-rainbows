@@ -450,6 +450,7 @@ let sketchUI = function (p5_) {
     });
 
     let createPrismControls = p5_.select("#create-prism-controls"); // undo, triangle, circle, sqaure
+    let deletePrismControls = p5_.select("#delete-prism-controls"); // empty all button
     let controls = p5_.select("#controls"); // create, delete, restart etc
 
     let undoButton = p5_.select("#undo");
@@ -472,6 +473,23 @@ let sketchUI = function (p5_) {
       p5_.createSquare();
     });
 
+    let deleteAllButton = p5_.select("#delete-all");
+
+    deleteAllButton.mouseClicked((e) => {
+      p5Prisms.clearPrisms();
+      p5_.clearPrismPoints();
+
+      // Once you've deleted all prisms there is nothing more to do so show the previous create,delete,reset etc buttons
+
+      deleteMode = false;
+      deletePrismControls.addClass("hidden"); //hide the delete all button
+      controls.removeClass("hidden"); // show the create,delete,reset etc buttons
+      p5_.cursor(p5_.ARROW);
+
+      doneButton.addClass("hidden"); // hide the done button
+      maxButton.removeClass("hidden"); // show the menu maximisation button
+    });
+
     createButton.mouseClicked((e) => {
       drawingMode = true;
       isPaused = true;
@@ -486,6 +504,7 @@ let sketchUI = function (p5_) {
     deleteButton.mouseClicked((e) => {
       deleteMode = true;
       isPaused = true;
+      deletePrismControls.removeClass("hidden");
       controls.addClass("hidden"); //hide the create,delete buttons
       doneButton.removeClass("hidden"); // show the done button
       minButton.addClass("hidden"); // hide the menu minimisation button
@@ -506,7 +525,8 @@ let sketchUI = function (p5_) {
         p5_.setDraftPrismReady(false);
       } else {
         deleteMode = false;
-        controls.removeClass("hidden"); // show the create,delete buttons
+        deletePrismControls.addClass("hidden");
+        controls.removeClass("hidden"); // show the create,delete,reset etc buttons
         p5_.cursor(p5_.ARROW);
       }
       doneButton.addClass("hidden"); // hide the done button
@@ -546,15 +566,6 @@ let sketchUI = function (p5_) {
 
     clearPhotonsButton.mousePressed((e) => {
       p5Photons.clearPhotons();
-      minButton.addClass("hidden"); // hide the menu minimisation button
-      maxButton.removeClass("hidden"); // show the menu maximisation button
-      menumax.addClass("hidden"); // switch menu to minimised form
-    });
-
-    let clearPrismsButton = p5_.select("#clear-prisms");
-    clearPrismsButton.mouseClicked((e) => {
-      p5Prisms.clearPrisms();
-      p5_.clearPrismPoints();
       minButton.addClass("hidden"); // hide the menu minimisation button
       maxButton.removeClass("hidden"); // show the menu maximisation button
       menumax.addClass("hidden"); // switch menu to minimised form
