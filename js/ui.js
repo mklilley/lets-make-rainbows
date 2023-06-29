@@ -236,6 +236,23 @@ let sketchUI = function (p5_) {
         }
       }
       return false;
+    } else {
+      // move the menu
+      if (e.target.parentElement.localName === "button") {
+        // User dragging elsewhere on the menu buttons so move the menu
+        endX = p5_.mouseX;
+        endY = p5_.mouseY;
+
+        const currentLeft = parseInt(menu.style("left")); //strips the "px"
+        const currentTop = parseInt(menu.style("top")); //strips the "px"
+        console.log(currentLeft, currentTop);
+
+        menu.style("left", `${currentLeft + (endX - startX)}px`);
+        menu.style("top", `${currentTop + (endY - startY)}px`);
+        // need to reset the startX and startY position, otherwise the menu will accelerate off the canvas
+        startX = p5_.mouseX;
+        startY = p5_.mouseY;
+      }
     }
   };
 
@@ -427,6 +444,20 @@ let sketchUI = function (p5_) {
 
   p5_.createMenu = function () {
     menu = p5_.select("#menu");
+
+    if ("ontouchstart" in window) {
+      menu.touchStarted((e) => {
+        // Allows the menu to be moved
+        startX = e.changedTouches[0].clientX;
+        startY = e.changedTouches[0].clientY;
+      });
+    } else {
+      menu.mousePressed((e) => {
+        // Allows the menu to be moved
+        startX = p5_.mouseX;
+        startY = p5_.mouseY;
+      });
+    }
 
     let menumax = p5_.select("#menu-max");
 
