@@ -14,7 +14,7 @@ let sketchUI = function (p5_) {
 
   let reflectivitySliderChanging = false; // keeps track of whether the user is adjusting the reactivity slider.
 
-  let menu, createPrismControls, welcome; // Some DOM elements for UI
+  let menu, welcome; // Some DOM elements for UI
 
   let savePrismButton; // Will be attached to a draftPrism
 
@@ -449,8 +449,8 @@ let sketchUI = function (p5_) {
       maxButton.addClass("hidden");
     });
 
-    createPrismControls = p5_.select("#create-prism-controls"); // undo, triangle, circle, sqaure
-    editPrismControls = p5_.select("#edit-prism-controls"); // create, delete
+    let createPrismControls = p5_.select("#create-prism-controls"); // undo, triangle, circle, sqaure
+    let editPrismControls = p5_.select("#edit-prism-controls"); // create, delete
 
     let undoButton = p5_.select("#undo");
     undoButton.mouseClicked((e) => {
