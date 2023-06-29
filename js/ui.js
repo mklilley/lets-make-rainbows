@@ -14,11 +14,7 @@ let sketchUI = function (p5_) {
 
   let reflectivitySliderChanging = false; // keeps track of whether the user is adjusting the reactivity slider.
 
-  let menu,
-    createPrismOptions,
-    deletePrismOptions,
-    createPrismControls,
-    welcome; // Some DOM elements for UI
+  let menu, createPrismControls, welcome; // Some DOM elements for UI
 
   let savePrismButton; // Will be attached to a draftPrism
 
@@ -446,13 +442,14 @@ let sketchUI = function (p5_) {
   p5_.createMenu = function () {
     menu = p5_.select("#menu");
 
-    createPrismOptions = p5_.select("#create-options");
-    deletePrismOptions = p5_.select("#delete-options");
-
     let menumax = p5_.select("#menu-max");
 
-    minButton = p5_.select("#min");
-    maxButton = p5_.select("#max");
+    let doneButton = p5_.select("#done");
+    let createButton = p5_.select("#create");
+    let deleteButton = p5_.select("#delete");
+
+    let minButton = p5_.select("#min");
+    let maxButton = p5_.select("#max");
 
     minButton.mouseClicked((e) => {
       menumax.addClass("hidden");
@@ -466,7 +463,8 @@ let sketchUI = function (p5_) {
       maxButton.addClass("hidden");
     });
 
-    createPrismControls = p5_.select("#create-prism-controls");
+    createPrismControls = p5_.select("#create-prism-controls"); // undo, triangle, circle, sqaure
+    editPrismControls = p5_.select("#edit-prism-controls"); // create, delete
 
     let undoButton = p5_.select("#undo");
     undoButton.mouseClicked((e) => {
@@ -488,43 +486,45 @@ let sketchUI = function (p5_) {
       p5_.createSquare();
     });
 
-    let prismToggle = p5_.select("#create");
+    createButton.mouseClicked((e) => {
+      drawingMode = true;
+      isPaused = true;
+      createPrismControls.removeClass("hidden"); // show the undo, triangle, circle and square buttons
+      editPrismControls.addClass("hidden"); //hide the create,delete buttons
+      doneButton.removeClass("hidden"); // show the done button
+      minButton.addClass("hidden"); // hide the menu minimisation button
+      maxButton.addClass("hidden"); // hide the menu minimisation button
+      menumax.addClass("hidden"); // switch menu to minimised form
+    });
 
-    prismToggle.changed((e) => {
-      drawingMode = prismToggle.checked();
-      // Note, there is something a bit weird about checkboxes in p5. When you click on the label
-      // the checkbox changes twice. The code below is to mitigate this to some degree. I'll need to revisit
-      // this later
-      if (!drawingMode) {
+    deleteButton.mouseClicked((e) => {
+      deleteMode = true;
+      isPaused = true;
+      editPrismControls.addClass("hidden"); //hide the create,delete buttons
+      doneButton.removeClass("hidden"); // show the done button
+      minButton.addClass("hidden"); // hide the menu minimisation button
+      maxButton.addClass("hidden"); // hide the menu minimisation button
+      menumax.addClass("hidden"); // switch menu to minimised form
+      p5_.cursor(p5_.CROSS);
+    });
+
+    doneButton.mouseClicked((e) => {
+      if (drawingMode) {
+        drawingMode = false;
+        createPrismControls.addClass("hidden"); // hide the undo, triangle, circle and square buttons
+        editPrismControls.removeClass("hidden"); // show the create,delete buttons
+
         // Clear any unfinished prisms if user switches off drawing mode
         points = [];
         p5_.clear(); // Clear the pixels in the canvas
-        createPrismOptions.addClass("hidden");
-        createPrismControls.addClass("hidden");
         p5_.setDraftPrismReady(false);
       } else {
-        isPaused = true; // Pause the simulation
-        createPrismOptions.removeClass("hidden");
-        createPrismControls.removeClass("hidden");
-        deleteToggle.checked(false);
-        deleteToggle.elt.dispatchEvent(new Event("change"));
-      }
-    });
-
-    let deleteToggle = p5_.select("#delete");
-
-    deleteToggle.changed((e) => {
-      deleteMode = deleteToggle.checked();
-      if (deleteMode) {
-        deletePrismOptions.removeClass("hidden");
-        isPaused = true; // Pause the simulation
-        prismToggle.checked(false);
-        prismToggle.elt.dispatchEvent(new Event("change"));
-        p5_.cursor(p5_.CROSS);
-      } else {
-        deletePrismOptions.addClass("hidden");
+        deleteMode = false;
+        editPrismControls.removeClass("hidden"); // show the create,delete buttons
         p5_.cursor(p5_.ARROW);
       }
+      doneButton.addClass("hidden"); // hide the done button
+      maxButton.removeClass("hidden"); // show the menu maximisation button
     });
 
     let reflectivitySlider = p5_.select("#reflectivity-slider");
