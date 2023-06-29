@@ -554,9 +554,9 @@ let sketchUI = function (p5_) {
       p5_.clearPrismPoints();
     });
 
-    let restartSimulationButton = p5_.select("#restart");
-    restartSimulationButton.mouseClicked((e) => {
-      p5Photons.restartPhotons();
+    let resetSimulationButton = p5_.select("#reset");
+    resetSimulationButton.mouseClicked((e) => {
+      p5Photons.resetPhotons();
     });
 
     let showWelcomeButton = p5_.select("#show-welcome");

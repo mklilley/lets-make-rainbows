@@ -53,7 +53,7 @@ let sketchPhotons = function (p5_) {
     storePhotonsInUrl();
   };
 
-  p5_.restartPhotons = function () {
+  p5_.resetPhotons = function () {
     photons = [];
     p5_.clear();
     photonsInit.forEach((init) => {
