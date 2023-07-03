@@ -1,6 +1,6 @@
 # lets-make-rainbows
 
-An interactive digital experiment to simulate the physics of rainbows.
+An interactive digital experiment to simulate the physics of rainbows. For more context on the why, [visit my blog](https://mattlilley.com/posts/lets-make-rainbows/).
 
 ## Physics
 
